@@ -39,7 +39,7 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
-      title: "斗鱼云剪平台",
+      title: "${PROJECT_NAME}",
     }),
   ],
   devServer: {
