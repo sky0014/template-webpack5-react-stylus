@@ -3,10 +3,12 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = (env, argv) => {
-  const isDev = argv.mode === "development";
+  const isDev = argv.mode !== "production";
 
   return {
-    entry: path.resolve(__dirname, "./src/index.js"),
+    devtool: isDev ? "source-map" : false,
+
+    entry: path.resolve(__dirname, "./src/index"),
 
     output: {
       filename: "bundle.js",
@@ -18,7 +20,7 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          test: /\.(js|jsx)$/,
+          test: /\.(js|jsx|ts|tsx)$/,
           exclude: /node_modules/,
           use: ["babel-loader"],
         },
@@ -29,17 +31,7 @@ module.exports = (env, argv) => {
             {
               loader: "css-loader",
               options: {
-                importLoaders: 2,
-                modules: {
-                  auto: (filepath) =>
-                    !/node_modules/i.test(filepath) &&
-                    !/\.global\.\w+$/i.test(filepath),
-                  localIdentContext: "src",
-                  localIdentName: isDev
-                    ? "[path][name]__[local]"
-                    : "[hash:base64:8]",
-                  exportLocalsConvention: "camelCaseOnly",
-                },
+                importLoaders: 0,
               },
             },
             "postcss-loader",
@@ -59,7 +51,7 @@ module.exports = (env, argv) => {
       ],
     },
     resolve: {
-      extensions: ["*", ".js", ".jsx"],
+      extensions: ["*", ".ts", ".tsx", ".js", ".jsx"],
     },
     plugins: [
       new MiniCssExtractPlugin(),
@@ -69,7 +61,6 @@ module.exports = (env, argv) => {
       }),
     ],
     devServer: {
-      contentBase: path.resolve(__dirname, "./dist"),
       historyApiFallback: true,
     },
   };
