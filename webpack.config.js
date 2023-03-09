@@ -52,6 +52,7 @@ module.exports = (env, argv) => {
     },
     resolve: {
       extensions: ["*", ".ts", ".tsx", ".js", ".jsx"],
+      plugins: [new TsconfigPathsPlugin()],
     },
     plugins: [
       new MiniCssExtractPlugin(),
